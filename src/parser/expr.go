@@ -26,7 +26,7 @@ func parse_expr(p *parser, bp binding_power) ast.Expr {
 			panic(fmt.Sprintf("LED Handler expected for token %s\n", lexer.TokenKindString(tokenKind)))
 		}
 
-		left = led_fn(p, left, bp)
+		left = led_fn(p, left, bp_lu[p.currentTokenKind()])
 	}
 
 	return left
@@ -54,11 +54,39 @@ func parse_primary_expr(p *parser) ast.Expr {
 
 func parse_binary_expr(p *parser, left ast.Expr, bp binding_power) ast.Expr {
 	operatorToken := p.advance()
-	right := parse_expr(p, bp_lu[operatorToken.Kind])
+	right := parse_expr(p, bp)
 
 	return ast.BinaryExpr{
 		Left:     left,
 		Operator: operatorToken,
 		Right:    right,
+	}
+}
+
+func parse_prefix_expr(p *parser) ast.Expr {
+	operatorTok := p.advance()
+	rhs := parse_expr(p, default_bp)
+
+	return ast.PrefixExpr{
+		Operator:  operatorTok,
+		RightExpr: rhs,
+	}
+}
+
+func parse_grouping_expr(p *parser) ast.Expr {
+	p.advance()
+	expr := parse_expr(p, default_bp)
+	p.expect(lexer.CLOSE_PAREN)
+	return expr
+}
+
+func parse_assignment_expr(p *parser, left ast.Expr, bp binding_power) ast.Expr {
+	operatorTok := p.advance()
+	rhs := parse_expr(p, bp)
+
+	return ast.AssignmentExpr{
+		Operator: operatorTok,
+		RHSValue: rhs,
+		Assigne:  left,
 	}
 }
