@@ -1,13 +1,15 @@
 package main
 
 import (
-	"os"       
-    "https://github.com/Dorakokce/DoraScriptGo/src/lexer/"
+	"os"
+
+	"github.com/Dorakokce/DoraScriptGo/src/lexer"
 )
 
 func main() {
 	bytes, _ := os.ReadFile("./examples/00.ds")
-	source := string(bytes)
-
-	tokens := lexer.Tokenize(source)
+	tokens := lexer.Tokenize(string(bytes))
+	for _, tok := range tokens {
+		tok.Debug()
+	}
 }
