@@ -4,12 +4,14 @@ import (
 	"os"
 
 	"github.com/Dorakokce/DoraScriptGo/src/lexer"
+	"github.com/Dorakokce/DoraScriptGo/src/parser"
+	"github.com/sanity-io/litter"
 )
 
 func main() {
-	bytes, _ := os.ReadFile("./examples/01.ds")
+	bytes, _ := os.ReadFile("./examples/02.ds")
 	tokens := lexer.Tokenize(string(bytes))
-	for _, tok := range tokens {
-		tok.Debug()
-	}
+
+	ast := parser.Parse(tokens)
+	litter.Dump(ast)
 }
