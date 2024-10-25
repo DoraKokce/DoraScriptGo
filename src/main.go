@@ -1,8 +1,8 @@
 package main
 
 import (
-	"os"
- "https://github.com/Dorakokce/DoraScriptGo/src/lexer/"
+	"os"       
+  "https://github.com/Dorakokce/DoraScriptGo/src/lexer/"
 )
 
 func main() {
