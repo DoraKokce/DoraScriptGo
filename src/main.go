@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	bytes, _ := os.ReadFile("./examples/00.ds")
+	bytes, _ := os.ReadFile("./examples/01.ds")
 	tokens := lexer.Tokenize(string(bytes))
 	for _, tok := range tokens {
 		tok.Debug()
