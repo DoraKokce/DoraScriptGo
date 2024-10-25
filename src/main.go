@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+ "https://github.com/Dorakokce/DoraScriptGo/src/lexer/"
 )
 
 func main() {
