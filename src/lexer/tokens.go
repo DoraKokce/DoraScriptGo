@@ -53,6 +53,7 @@ const (
 	LET
 	CONST
 	CLASS
+	STRUCT
 	NEW
 	IMPORT
 	FROM
@@ -65,12 +66,14 @@ const (
 	EXPORT
 	TYPEOF
 	IN
+	STATIC
 )
 
 var reserved_lu map[string]TokenKind = map[string]TokenKind{
 	"let":     LET,
 	"const":   CONST,
 	"class":   CLASS,
+	"struct":  STRUCT,
 	"new":     NEW,
 	"import":  IMPORT,
 	"from":    FROM,
@@ -83,6 +86,7 @@ var reserved_lu map[string]TokenKind = map[string]TokenKind{
 	"export":  EXPORT,
 	"typeof":  TYPEOF,
 	"in":      IN,
+	"static":  STATIC,
 }
 
 type Token struct {
@@ -192,6 +196,8 @@ func TokenKindString(kind TokenKind) string {
 		return "const"
 	case CLASS:
 		return "class"
+	case STRUCT:
+		return "struct"
 	case NEW:
 		return "new"
 	case IMPORT:
@@ -214,6 +220,8 @@ func TokenKindString(kind TokenKind) string {
 		return "export"
 	case IN:
 		return "in"
+	case STATIC:
+		return "static"
 	default:
 		return fmt.Sprintf("unknown(%d)", kind)
 	}

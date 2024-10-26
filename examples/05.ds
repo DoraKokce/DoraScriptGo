@@ -1,0 +1,4 @@
+struct vec {
+    x: number;
+    y: number;
+}

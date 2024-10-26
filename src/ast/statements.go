@@ -15,6 +15,23 @@ type VarDeclStmt struct {
 	ExplicitType  Type
 }
 
+type StructProperty struct {
+	IsStatic bool
+	Type     Type
+}
+
+type StructMethod struct {
+	IsStatic bool
+	//Type     FnType
+}
+
+type StructDeclStmt struct {
+	StructName string
+	Properties map[string]StructProperty
+	Methods    map[string]StructMethod
+}
+
 func (n BlockStmt) stmt()      {}
 func (n ExpressionStmt) stmt() {}
 func (n VarDeclStmt) stmt()    {}
+func (n StructDeclStmt) stmt() {}
