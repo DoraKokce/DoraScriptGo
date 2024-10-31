@@ -1,8 +1,6 @@
 package parser
 
 import (
-	"fmt"
-
 	"github.com/Dorakokce/DoraScriptGo/src/ast"
 	"github.com/Dorakokce/DoraScriptGo/src/lexer"
 )
@@ -57,48 +55,35 @@ func parse_var_decl_stmt(p *parser) ast.Stmt {
 
 func parse_struct_decl(p *parser) ast.Stmt {
 	p.expect(lexer.STRUCT)
-	var properties = map[string]ast.StructProperty{}
-	var methods = map[string]ast.StructMethod{}
-	var structName = p.expect(lexer.IDENTIFIER).Value
+	structName := p.expect(lexer.IDENTIFIER).Value
 
+	return ast.StructDeclStmt{
+		Properties: parse_obj_prop(p),
+		StructName: structName,
+	}
+}
+
+func parse_obj_prop(p *parser) map[string]ast.ObjectProperty {
 	p.expect(lexer.OPEN_CURLY)
 
+	props := map[string]ast.ObjectProperty{}
+
 	for p.hasTokens() && p.currentTokenKind() != lexer.CLOSE_CURLY {
-		isStatic := false
-		var propertyName string
+		static := false
 		if p.currentTokenKind() == lexer.STATIC {
-			isStatic = true
-			p.expect(lexer.STATIC)
+			static = true
 		}
+		name := p.expect(lexer.IDENTIFIER).Value
+		p.expect(lexer.COLON)
+		propType := parse_type(p, default_bp)
 
-		if p.currentTokenKind() == lexer.IDENTIFIER {
-			propertyName = p.expect(lexer.IDENTIFIER).Value
-			p.expectError(lexer.COLON, "Expected to find colon following after struct property")
-			structType := parse_type(p, default_bp)
-			p.expect(lexer.SEMI_COLON)
-
-			_, exists := properties[propertyName]
-
-			if exists {
-				panic(fmt.Sprintf("Property %s has already bean declared", propertyName))
-			}
-
-			properties[propertyName] = ast.StructProperty{
-				IsStatic: isStatic,
-				Type:     structType,
-			}
-
-			continue
+		props[name] = ast.ObjectProperty{
+			IsStatic: static,
+			Type:     propType,
 		}
-
-		panic("Cannot curently handle methods inside struct decl")
 	}
 
 	p.expect(lexer.CLOSE_CURLY)
 
-	return ast.StructDeclStmt{
-		Properties: properties,
-		Methods:    methods,
-		StructName: structName,
-	}
+	return props
 }
