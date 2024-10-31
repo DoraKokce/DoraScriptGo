@@ -76,6 +76,7 @@ func parse_obj_prop(p *parser) map[string]ast.ObjectProperty {
 		name := p.expect(lexer.IDENTIFIER).Value
 		p.expect(lexer.COLON)
 		propType := parse_type(p, default_bp)
+		p.expect(lexer.SEMI_COLON)
 
 		props[name] = ast.ObjectProperty{
 			IsStatic: static,
